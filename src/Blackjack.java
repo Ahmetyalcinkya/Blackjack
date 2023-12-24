@@ -7,12 +7,12 @@ public class Blackjack {
     private int height;
     private List<Card> deck;
     private Card hiddenCard;
-    public Blackjack(int width, int height) {
+    public Blackjack(int width, int height, Dealer dealer, Player player) {
         this.width = width;
         this.height = height;
-        startGame();
+        startGame(dealer, player);
     }
-    public void startGame(){
+    public void startGame(Dealer dealer, Player player){
         //deck
         buildDeck();
         shuffleDeck();
@@ -21,7 +21,6 @@ public class Blackjack {
         int aceCountForPlayer = 0;
 
         //dealer
-        Dealer dealer = new Dealer();
         hiddenCard = deck.remove(deck.size()-1);
         dealer.setDealerSum(hiddenCard.getValue());
         aceCountForDealer += hiddenCard.isAce() ? 1 : 0;
@@ -34,7 +33,6 @@ public class Blackjack {
         dealer.getDealerHand().add(card);
 
         //player
-        Player player = new Player();
         for(int i = 0; i < 2; i++){
             card = deck.remove(deck.size()-1);
             player.setPlayerSum(player.getPlayerSum() + card.getValue());
@@ -63,5 +61,27 @@ public class Blackjack {
             deck.set(i, randomCard);
             deck.set(j, currentCard);
         }
+    }
+    public List<Card> getDeck() {
+        return deck;
+    }
+
+    public Card getHiddenCard() {
+        return hiddenCard;
+    }
+
+    public int reducePlayerAce(Player player){
+        while (player.getPlayerSum() > 21 && player.getPlayerAceCount() > 0){
+            player.setPlayerSum(player.getPlayerSum() - 10);
+            player.setPlayerAceCount(player.getPlayerAceCount() - 1);
+        }
+        return player.getPlayerSum();
+    }
+    public int reduceDealerAce(Dealer dealer) {
+        while (dealer.getDealerSum() > 21 && dealer.getDealerAceCount() > 0) {
+            dealer.setDealerSum(dealer.getDealerSum() - 10);
+            dealer.setDealerAceCount(dealer.getDealerAceCount() - 1);
+        }
+        return dealer.getDealerSum();
     }
 }

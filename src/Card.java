@@ -21,6 +21,10 @@ public class Card {
         return value == "A";
     }
 
+    public String getImagePath(){
+        return "./Cards/" + toString() + ".png";
+    }
+
     @Override
     public String toString() {
         return value + "-" + type;
